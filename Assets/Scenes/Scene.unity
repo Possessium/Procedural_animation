@@ -183,12 +183,12 @@ GameObject:
   m_Component:
   - component: {fileID: 34232359}
   m_Layer: 0
-  m_Name: Target back right
+  m_Name: Parented back right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &34232359
 Transform:
   m_ObjectHideFlags: 0
@@ -321,7 +321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 153436903}
   m_Layer: 0
-  m_Name: Targets body
+  m_Name: Targets Parented
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -356,12 +356,12 @@ GameObject:
   m_Component:
   - component: {fileID: 181342956}
   m_Layer: 0
-  m_Name: Target back right
+  m_Name: Actual back right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &181342956
 Transform:
   m_ObjectHideFlags: 0
@@ -387,12 +387,12 @@ GameObject:
   m_Component:
   - component: {fileID: 199511784}
   m_Layer: 0
-  m_Name: Target back left
+  m_Name: Parented back left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &199511784
 Transform:
   m_ObjectHideFlags: 0
@@ -506,7 +506,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6079485249770035811, guid: 7f3d400a77b4f274080ed81669771246, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects:
@@ -823,7 +823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 451251206}
   m_Layer: 0
-  m_Name: Target front left
+  m_Name: Parented front left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1044,7 +1044,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6079485249770035811, guid: 7f3d400a77b4f274080ed81669771246, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects:
@@ -1276,15 +1276,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 759549975}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b1dfaff2e26b5d4481dbb63c43013f7, type: 3}
+  m_Script: {fileID: 11500000, guid: b35c05b7ae10bee4c8182938489441b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frontLeftCurrent: {fileID: 451251206}
-  frontLeftTarget: {fileID: 1479107476}
-  frontRightCurrent: {fileID: 1799615789}
-  frontRightTarget: {fileID: 1042136586}
-  distance: 2
-  speed: 1
+  parentedFrontLeftLeg: {fileID: 451251206}
+  targetFrontLeftLeg: {fileID: 1479107476}
+  parentedFrontRightLeg: {fileID: 1799615789}
+  targetFrontRightLeg: {fileID: 1042136586}
+  parentedBackLeftLeg: {fileID: 199511784}
+  targetBackLeftLeg: {fileID: 1267020054}
+  parentedBackRightLeg: {fileID: 34232359}
+  targetBackRightLeg: {fileID: 181342956}
+  distance: 2.32
+  speed: 15
 --- !u!4 &854404346 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6079485249770035810, guid: 7f3d400a77b4f274080ed81669771246, type: 3}
@@ -1569,7 +1573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1042136586}
   m_Layer: 0
-  m_Name: Target front right
+  m_Name: Actual front right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1809,12 +1813,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1267020054}
   m_Layer: 0
-  m_Name: Target back left
+  m_Name: Actual back left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1267020054
 Transform:
   m_ObjectHideFlags: 0
@@ -1895,7 +1899,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1479107476}
   m_Layer: 0
-  m_Name: Target front left
+  m_Name: Actual front left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1926,7 +1930,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1657831506}
   m_Layer: 0
-  m_Name: Targets legs
+  m_Name: Targets Actual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2072,7 +2076,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1799615789}
   m_Layer: 0
-  m_Name: Target front right
+  m_Name: Parented front right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -4,15 +4,18 @@ using UnityEngine;
 
 public class SpiderLeg : MonoBehaviour
 {
-    [SerializeField] private Transform frontLeftCurrent = null;
-    [SerializeField] private Transform frontLeftTarget = null;
-    [SerializeField] private Transform frontRightCurrent = null;
-    [SerializeField] private Transform frontRightTarget = null;
+    [SerializeField] private Transform frontLeftParented = null;
+    [SerializeField] private Transform frontLeftActual = null;
+    [SerializeField] private Transform frontRightParented = null;
+    [SerializeField] private Transform frontRightActual = null;
     [SerializeField] private float distance = 5;
     [SerializeField] private float speed = 5;
 
     private bool moveFrontLeft = false;
     private bool moveFrontRight = false;
+
+    Vector3 frontLeftTargetPosition = Vector3.zero;
+    Vector3 frontRightTargetPosition = Vector3.zero;
 
     Coroutine frontLeft = null;
     Coroutine frontRight = null;
@@ -20,7 +23,6 @@ public class SpiderLeg : MonoBehaviour
     /*
      * 
      * Changer en faisant en sorte que quand la distance est trop grande, la position du target est stockée et c'est là où le leg doit aller.
-     * Virer le lerp aussi
      * 
      */
 
@@ -33,51 +35,53 @@ public class SpiderLeg : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(frontLeftTarget.position, .25f);
-        Gizmos.DrawSphere(frontRightTarget.position, .25f);
+        Gizmos.DrawSphere(frontLeftActual.position, .25f);
+        Gizmos.DrawSphere(frontRightActual.position, .25f);
         Gizmos.color = Color.green;
-        Gizmos.DrawSphere(frontLeftCurrent.position, .25f);
-        Gizmos.DrawSphere(frontRightCurrent.position, .25f);
+        Gizmos.DrawSphere(frontLeftParented.position, .25f);
+        Gizmos.DrawSphere(frontRightParented.position, .25f);
     }
 
     private void FrontLeft()
     {
-        RaycastHit[] _hits = Physics.RaycastAll(new Vector3(frontLeftTarget.transform.position.x, transform.position.y, frontLeftTarget.transform.position.z), Vector3.down, 50);
+        RaycastHit[] _hits = Physics.RaycastAll(new Vector3(frontLeftActual.transform.position.x, transform.position.y, frontLeftActual.transform.position.z), Vector3.down, 50);
         if (_hits.Length > 0)
         {
             foreach (RaycastHit _hit in _hits)
             {
                 if (_hit.transform != transform)
                 {
-                    frontLeftTarget.transform.position = _hit.point;
+                    frontLeftActual.transform.position = _hit.point;
                     break;
                 }
             }
         }
 
-        if (frontRight == null && frontLeft == null && Vector3.Distance(frontLeftTarget.position, frontLeftCurrent.position) > distance)
+        if (frontRight == null && frontLeft == null && Vector3.Distance(frontLeftActual.position, frontLeftParented.position) > distance)
         {
+            frontLeftTargetPosition = frontLeftParented.position;
             frontLeft = StartCoroutine(MoveFrontLeft());
         }
     }
 
     private void FrontRight()
     {
-        RaycastHit[] _hits = Physics.RaycastAll(new Vector3(frontRightTarget.transform.position.x, transform.position.y, frontRightTarget.transform.position.z), Vector3.down, 50);
+        RaycastHit[] _hits = Physics.RaycastAll(new Vector3(frontRightActual.transform.position.x, transform.position.y, frontRightActual.transform.position.z), Vector3.down, 50);
         if (_hits.Length > 0)
         {
             foreach (RaycastHit _hit in _hits)
             {
                 if (_hit.transform != transform)
                 {
-                    frontRightTarget.transform.position = _hit.point;
+                    frontRightActual.transform.position = _hit.point;
                     break;
                 }
             }
         }
 
-        if (frontRight == null && frontLeft == null && Vector3.Distance(frontRightTarget.position, frontRightCurrent.position) > distance)
+        if (frontRight == null && frontLeft == null && Vector3.Distance(frontRightActual.position, frontRightParented.position) > distance)
         {
+            frontRightTargetPosition = frontRightParented.position;
             frontRight = StartCoroutine(MoveFrontRight());
         }
     }
@@ -86,11 +90,11 @@ public class SpiderLeg : MonoBehaviour
 
     IEnumerator MoveFrontLeft()
     {
-        while(Vector3.Distance(frontLeftCurrent.position, frontLeftTarget.position) > .1f)
+        while(Vector3.Distance(frontLeftTargetPosition, frontLeftActual.position) > .1f)
         {
-            frontLeftTarget.position = Vector3.Lerp(frontLeftTarget.position, new Vector3(frontLeftCurrent.position.x, heightReached ? transform.position.y : frontLeftCurrent.position.y, frontLeftCurrent.position.z), Time.deltaTime * speed);
-            Debug.Log(heightReached);
-            heightReached = frontLeftTarget.position.y >= transform.position.y;
+            frontLeftActual.position = Vector3.MoveTowards(frontLeftActual.position, new Vector3(frontLeftTargetPosition.x, heightReached ? frontLeftTargetPosition.y : transform.position.y, frontLeftTargetPosition.z), Time.deltaTime * speed);
+
+            heightReached = frontLeftActual.position.y >= transform.position.y;
 
             yield return new WaitForEndOfFrame();
         }
@@ -100,11 +104,11 @@ public class SpiderLeg : MonoBehaviour
 
     IEnumerator MoveFrontRight()
     {
-        while (Vector3.Distance(frontRightCurrent.position, frontRightTarget.position) > .1f)
+        while (Vector3.Distance(frontRightTargetPosition, frontRightActual.position) > .1f)
         {
-            frontRightTarget.position = Vector3.Lerp(frontRightTarget.position, new Vector3(frontRightCurrent.position.x, heightReached ? transform.position.y : frontRightCurrent.position.y, frontRightCurrent.position.z), Time.deltaTime * speed);
+            frontRightActual.position = Vector3.MoveTowards(frontRightActual.position, new Vector3(frontRightTargetPosition.x, heightReached ? frontRightTargetPosition.y : transform.position.y, frontRightTargetPosition.z), Time.deltaTime * speed);
 
-            heightReached = frontRightTarget.position.y >= transform.position.y;
+            heightReached = frontRightActual.position.y >= transform.position.y;
 
             yield return new WaitForEndOfFrame();
         }

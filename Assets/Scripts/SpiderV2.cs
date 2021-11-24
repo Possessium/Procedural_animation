@@ -18,6 +18,7 @@ public class SpiderV2 : MonoBehaviour
 
     #region Parameters
     [SerializeField] private float distance = 5;
+    [SerializeField, Range(.01f, 1)] private float lerpThreshold = .1f;
     [SerializeField] private float speed = 15;
     #endregion
 
@@ -26,11 +27,11 @@ public class SpiderV2 : MonoBehaviour
     private Vector3 bufferTargetFrontRightPosition = Vector3.zero;
     private Vector3 bufferTargetBackLeftPosition = Vector3.zero;
     private Vector3 bufferTargetBackRightPosition = Vector3.zero;
-    private Coroutine moveFrontLeft = null;
-    private Coroutine moveFrontRight = null;
     private bool heightReachedFront = false;
     private bool heightReachedBack = false;
+    private bool isLegMoving = false;
     #endregion
+    private event System.Action OnMoveLeg = null;
     public bool IsReady { get { return parentedFrontLeftLeg && parentedFrontRightLeg && parentedBackLeftLeg && parentedBackRightLeg && targetFrontLeftLeg && targetFrontRightLeg && targetBackLeftLeg && targetBackRightLeg; } }
     #endregion
 
@@ -59,27 +60,30 @@ public class SpiderV2 : MonoBehaviour
         CheckHeight();
 
         // If no coroutine is already playing and the distance between front left leg or back right leg is too big
-        if (moveFrontLeft == null && moveFrontRight == null && (Vector3.Distance(parentedFrontLeftLeg.position, targetFrontLeftLeg.position) > distance || Vector3.Distance(parentedBackRightLeg.position, targetBackRightLeg.position) > distance))
+        if (!isLegMoving && (Vector3.Distance(parentedFrontLeftLeg.position, targetFrontLeftLeg.position) > distance || Vector3.Distance(parentedBackRightLeg.position, targetBackRightLeg.position) > distance))
         {
             // Sets the buffer position to have them fixed
             bufferTargetFrontLeftPosition = parentedFrontLeftLeg.position;
             bufferTargetBackRightPosition = parentedBackRightLeg.position;
 
             // Start the coroutine to move the legs
-            moveFrontLeft = StartCoroutine(MoveFrontLeft());
+            isLegMoving = true;
+            OnMoveLeg += MoveFirstSet;
         }
 
         // If no coroutine is already playing and the distance between front right leg or back left leg is too big
-        if (moveFrontLeft == null && moveFrontRight == null && (Vector3.Distance(parentedFrontRightLeg.position, targetFrontRightLeg.position) > distance || Vector3.Distance(parentedBackLeftLeg.position, targetBackLeftLeg.position) > distance))
+        if (!isLegMoving && (Vector3.Distance(parentedFrontRightLeg.position, targetFrontRightLeg.position) > distance || Vector3.Distance(parentedBackLeftLeg.position, targetBackLeftLeg.position) > distance))
         {
             // Sets the buffer position to have them fixed
             bufferTargetFrontRightPosition = parentedFrontRightLeg.position;
             bufferTargetBackLeftPosition = parentedBackLeftLeg.position;
 
             // Start the coroutine to move the legs
-            moveFrontRight = StartCoroutine(MoveFrontRight());
+            isLegMoving = true;
+            OnMoveLeg += MoveSecondSet;
         }
 
+        OnMoveLeg?.Invoke();
     }
 
     private void OnDrawGizmos()
@@ -115,10 +119,10 @@ public class SpiderV2 : MonoBehaviour
     /// Coroutine that moves front left and back right legs to their target position
     /// </summary>
     /// <returns></returns>
-    private IEnumerator MoveFrontLeft()
+    private void MoveFirstSet()
     {
         // Front letf and Back right legs are in sync, so the wile loops until both target position are correct
-        while (targetFrontLeftLeg.position != bufferTargetFrontLeftPosition && targetBackRightLeg.position != bufferTargetBackRightPosition)
+        if (Vector3.Distance(targetFrontLeftLeg.position, bufferTargetFrontLeftPosition) > lerpThreshold || Vector3.Distance(targetBackRightLeg.position, bufferTargetBackRightPosition) > lerpThreshold)
         {
             //// Front Left section
 
@@ -126,7 +130,7 @@ public class SpiderV2 : MonoBehaviour
             Vector3 _targetPosition = new Vector3(bufferTargetFrontLeftPosition.x, bufferTargetFrontLeftPosition.y + (heightReachedFront ? 0 : 2), bufferTargetFrontLeftPosition.z);
 
             // MoveTowards the leg to the target
-            targetFrontLeftLeg.position = Vector3.MoveTowards(targetFrontLeftLeg.position, _targetPosition, Time.deltaTime * speed);
+            targetFrontLeftLeg.position = Vector3.Lerp(targetFrontLeftLeg.position, _targetPosition, Time.deltaTime * speed);
 
             // If the height hasn't been reached yet, try to know if it as this time
             if (!heightReachedFront)
@@ -136,17 +140,21 @@ public class SpiderV2 : MonoBehaviour
 
             //// Back Right section
             _targetPosition = new Vector3(bufferTargetBackRightPosition.x, bufferTargetBackRightPosition.y + (heightReachedFront ? 0 : 2), bufferTargetBackRightPosition.z);
-            targetBackRightLeg.position = Vector3.MoveTowards(targetBackRightLeg.position, _targetPosition, Time.deltaTime * speed);
+            targetBackRightLeg.position = Vector3.Lerp(targetBackRightLeg.position, _targetPosition, Time.deltaTime * speed);
 
             if (!heightReachedBack)
                 heightReachedBack = targetBackRightLeg.position.y >= bufferTargetBackRightPosition.y + 1;
             ////
-
-            yield return new WaitForEndOfFrame();
         }
-        heightReachedFront = false;
-        heightReachedBack = false;
-        moveFrontLeft = null;
+
+        // Resets bool
+        else
+        {
+            heightReachedFront = false;
+            heightReachedBack = false;
+            isLegMoving = false;
+            OnMoveLeg = null;
+        }
     }
 
 
@@ -154,10 +162,10 @@ public class SpiderV2 : MonoBehaviour
     /// Coroutine that moves front right and back left legs to their target position
     /// </summary>
     /// <returns></returns>
-    private IEnumerator MoveFrontRight()
+    private void MoveSecondSet()
     {
         // Front right and Back left legs are in sync, so the wile loops until both target position are correct
-        while (targetFrontRightLeg.position != bufferTargetFrontRightPosition && targetBackLeftLeg.position != bufferTargetBackLeftPosition)
+        if (Vector3.Distance(targetFrontRightLeg.position, bufferTargetFrontRightPosition) > lerpThreshold || Vector3.Distance(targetBackLeftLeg.position, bufferTargetBackLeftPosition) > lerpThreshold)
         {
             //// Front Right section
             
@@ -165,7 +173,7 @@ public class SpiderV2 : MonoBehaviour
             Vector3 _targetPosition = new Vector3(bufferTargetFrontRightPosition.x, bufferTargetFrontRightPosition.y + (heightReachedFront ? 0 : 2), bufferTargetFrontRightPosition.z);
 
             // MoveTowards the leg to the target
-            targetFrontRightLeg.position = Vector3.MoveTowards(targetFrontRightLeg.position, _targetPosition, Time.deltaTime * speed);
+            targetFrontRightLeg.position = Vector3.Lerp(targetFrontRightLeg.position, _targetPosition, Time.deltaTime * speed);
 
             // If the height hasn't been reached yet, try to know if it as this time
             if (!heightReachedFront)
@@ -175,19 +183,21 @@ public class SpiderV2 : MonoBehaviour
 
             //// Back left section
             _targetPosition = new Vector3(bufferTargetBackLeftPosition.x, bufferTargetBackLeftPosition.y + (heightReachedFront ? 0 : 2), bufferTargetBackLeftPosition.z);
-            targetBackLeftLeg.position = Vector3.MoveTowards(targetBackLeftLeg.position, _targetPosition, Time.deltaTime * speed);
+            targetBackLeftLeg.position = Vector3.Lerp(targetBackLeftLeg.position, _targetPosition, Time.deltaTime * speed);
 
             if (!heightReachedBack)
                 heightReachedBack = targetBackLeftLeg.position.y >= bufferTargetBackLeftPosition.y + 1;
             ////
-            
-            yield return new WaitForEndOfFrame();
         }
 
-        // Resets bool and Coroutine values
-        heightReachedFront = false;
-        heightReachedBack = false;
-        moveFrontRight = null;
+        // Resets bool
+        else
+        {
+            heightReachedFront = false;
+            heightReachedBack = false;
+            isLegMoving = false;
+            OnMoveLeg = null;
+        }
     }
     #endregion
 

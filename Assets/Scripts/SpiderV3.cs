@@ -11,6 +11,12 @@ public class SpiderV3 : MonoBehaviour
     [SerializeField] private float distance = 2;
     [SerializeField, Range(.01f, 1)] private float lerpThreshold = .1f;
 
+    [SerializeField] private SpiderLeg frontLeftLeg = null;
+    [SerializeField] private SpiderLeg frontRightLeg = null;
+    [SerializeField] private SpiderLeg backLeftLeg = null;
+    [SerializeField] private SpiderLeg backRightLeg = null;
+    [SerializeField] private Transform parentedTransformParent = null;
+
     private bool isFirstStepMoving = false;
     private bool isSecondStepMoving = false;
 
@@ -64,6 +70,11 @@ public class SpiderV3 : MonoBehaviour
                 secondSet.ForEach(x => x.ResetHeight());
             }
         }
+
+        // Sets the position of the parentedtransform because they can't be parented due to rotation of the body
+        parentedTransformParent.position = transform.position;
+
+        CheckAngle();
     }
 
 
@@ -72,17 +83,26 @@ public class SpiderV3 : MonoBehaviour
     /// </summary>
     private void CheckHeight(SpiderLeg _l)
     {
+        // Raycast from the leg position and transform height towards down
         RaycastHit[] _hits = Physics.RaycastAll(new Vector3(_l.ParentedTransform.position.x, transform.position.y, _l.ParentedTransform.position.z), Vector3.down, 20);
 
-        // Get the first object found and set the position of the parent to the hit point
-        foreach (RaycastHit _hit in _hits)
+        if(_hits.Length > 0)
         {
-            // Safety to not detect itself
-            if (_hit.transform != _l.transform)
+            Vector3 _position = Vector3.zero;
+            float _height = -99;
+
+            // Find the higher point found that is not the spider itself
+            foreach (RaycastHit _hit in _hits)
             {
-                _l.ParentedTransform.position = _hit.point;
-                break;
+                if(_hit.point.y > _height && _hit.transform != transform)
+                {
+                    _position = _hit.point;
+                    _height = _hit.point.y;
+                }
             }
+            // If found any changes the height of the ParentedTransform of the leg
+            if(_height > -99)
+                _l.ParentedTransform.position = _position;
         }
     }
 
@@ -111,5 +131,22 @@ public class SpiderV3 : MonoBehaviour
                 break;
             }
         }
+    }
+
+    /// <summary>
+    /// Moves body rotation based on the position of the legs in the four corners
+    /// </summary>
+    private void CheckAngle()
+    {
+        Vector3 _bufferAngle = Vector3.zero;
+
+        // Add value depending on the Y position of each leg and it neighbors
+        _bufferAngle.x += frontLeftLeg.BufferLegPosition.y - frontRightLeg.BufferLegPosition.y;
+        _bufferAngle.x += backLeftLeg.BufferLegPosition.y - backRightLeg.BufferLegPosition.y;
+        _bufferAngle.z -= frontLeftLeg.BufferLegPosition.y - backLeftLeg.BufferLegPosition.y;
+        _bufferAngle.z -= frontRightLeg.BufferLegPosition.y - backRightLeg.BufferLegPosition.y;
+
+        // Move the rotation value to the corrected one
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.Euler(_bufferAngle * 5), Time.deltaTime * (speed / 2));
     }
 }

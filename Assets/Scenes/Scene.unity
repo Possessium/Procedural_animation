@@ -173,6 +173,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1001 &23400334
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -304,6 +305,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 1413466630}
   TargetTransform: {fileID: 2138123507}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1 &30156268
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,6 +869,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 1953610169}
   TargetTransform: {fileID: 1493076397}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!4 &243696076 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6079485249770035810, guid: 7f3d400a77b4f274080ed81669771246, type: 3}
@@ -922,6 +925,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1 &268155438
 GameObject:
   m_ObjectHideFlags: 0
@@ -1008,6 +1012,117 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
+--- !u!1 &349771980
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 349771985}
+  - component: {fileID: 349771984}
+  - component: {fileID: 349771983}
+  - component: {fileID: 349771982}
+  - component: {fileID: 349771981}
+  m_Layer: 0
+  m_Name: Button
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &349771981
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349771980}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ce46db1eb75e644cbc14a4b0f7a924f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &349771982
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349771980}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &349771983
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349771980}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &349771984
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349771980}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &349771985
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 349771980}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6.51, y: 0.28, z: 19.88}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &351458867
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1130,6 +1245,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 1799615789}
   TargetTransform: {fileID: 1042136586}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1 &378592883
 GameObject:
   m_ObjectHideFlags: 0
@@ -1180,6 +1296,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1001 &418685227
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1369,6 +1486,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1 &451251205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1557,6 +1675,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1 &504357757
 GameObject:
   m_ObjectHideFlags: 0
@@ -2047,6 +2166,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 593813909}
   TargetTransform: {fileID: 1867084075}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1001 &555305628
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2311,6 +2431,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 214749684}
   TargetTransform: {fileID: 537985942}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1001 &620063904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2503,6 +2624,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -2737,6 +2859,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1 &784551145 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6079485249770035811, guid: 7f3d400a77b4f274080ed81669771246, type: 3}
@@ -3096,6 +3219,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 199511784}
   TargetTransform: {fileID: 1267020054}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1001 &951730604
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3418,6 +3542,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 1051270483}
   TargetTransform: {fileID: 92466885}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1001 &1030435259
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3549,6 +3674,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 268155439}
   TargetTransform: {fileID: 1182342933}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1 &1042136585
 GameObject:
   m_ObjectHideFlags: 0
@@ -4396,6 +4522,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1 &1413466629
 GameObject:
   m_ObjectHideFlags: 0
@@ -4508,6 +4635,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1 &1479107475
 GameObject:
   m_ObjectHideFlags: 0
@@ -4952,6 +5080,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 646536590}
   TargetTransform: {fileID: 1458683354}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1 &1628917335
 GameObject:
   m_ObjectHideFlags: 0
@@ -5437,6 +5566,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 34232359}
   TargetTransform: {fileID: 181342956}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1001 &1880696069
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5586,7 +5716,6 @@ MonoBehaviour:
   - {fileID: 546015191}
   - {fileID: 1030435262}
   - {fileID: 23400337}
-  movingLegs: []
 --- !u!54 &1880985317
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5765,6 +5894,7 @@ MonoBehaviour:
   ParentedTransform: {fileID: 541501423}
   TargetTransform: {fileID: 1347918526}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}
 --- !u!1 &1953610168
 GameObject:
   m_ObjectHideFlags: 0
@@ -5953,6 +6083,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!1001 &1985284661
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6202,6 +6333,7 @@ MonoBehaviour:
   Iterations: 100
   Delta: 0.001
   SnapBackStrength: 1
+  CompleteLength: 0
 --- !u!4 &2059108427 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6079485249770035810, guid: 7f3d400a77b4f274080ed81669771246, type: 3}
@@ -6602,3 +6734,4 @@ MonoBehaviour:
   ParentedTransform: {fileID: 451251206}
   TargetTransform: {fileID: 1479107476}
   BufferLegPosition: {x: 0, y: 0, z: 0}
+  legIK: {fileID: 0}

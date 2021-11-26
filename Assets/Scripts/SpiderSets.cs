@@ -27,6 +27,8 @@ public class SpiderSets : Spider
         // Set correct heights of all the legs parented target position
         firstSet.ForEach(x => CheckHeight(x));
         secondSet.ForEach(x => CheckHeight(x));
+        firstSet.ForEach(x => CheckInteractbles(x));
+        secondSet.ForEach(x => CheckInteractbles(x));
 
         // Check to see if any leg is too far for any set
         if (!isFirstStepMoving && !isSecondStepMoving)
@@ -36,7 +38,18 @@ public class SpiderSets : Spider
                 if (IsBeyondDistance(firstSet[i]))
                 {
                     isFirstStepMoving = true;
-                    firstSet.ForEach(x => x.BufferLegPosition = x.ParentedTransform.position);
+                    SpiderLeg _bufferLeg = null;
+                    for (int ii = 0; ii < firstSet.Count; ii++)
+                    {
+                        _bufferLeg = firstSet[ii];
+                        _bufferLeg.BufferLegPosition = _bufferLeg.ParentedTransform.position;
+                        if(_bufferLeg.Interactable != null)
+                        {
+                            RemoveInteractable(_bufferLeg.Interactable);
+                            _bufferLeg.Interactable.Deactivate();
+                            _bufferLeg.Interactable = null;
+                        }
+                    }
                     break;
                 }
             }
@@ -47,7 +60,18 @@ public class SpiderSets : Spider
                     if (IsBeyondDistance(secondSet[i]))
                     {
                         isSecondStepMoving = true;
-                        secondSet.ForEach(x => x.BufferLegPosition = x.ParentedTransform.position);
+                        SpiderLeg _bufferLeg = null;
+                        for (int ii = 0; ii < secondSet.Count; ii++)
+                        {
+                            _bufferLeg = secondSet[ii];
+                            _bufferLeg.BufferLegPosition = _bufferLeg.ParentedTransform.position;
+                            if (_bufferLeg.Interactable != null)
+                            {
+                                RemoveInteractable(_bufferLeg.Interactable);
+                                _bufferLeg.Interactable.Deactivate();
+                                _bufferLeg.Interactable = null;
+                            }
+                        }
                         break;
                     }
                 }
@@ -59,8 +83,21 @@ public class SpiderSets : Spider
             // Moves the leg
             firstSet.ForEach(x => x.MoveLeg(speed));
 
-            // Seek if all the legs have arrives to their target position
-            if (firstSet.TrueForAll(x => Vector3.Distance(x.TargetTransform.position, x.BufferLegPosition) < lerpThreshold))
+            SpiderLeg _bufferLeg = null;
+            int _trues = 0;
+            for (int i = 0; i < firstSet.Count; i++)
+            {
+                _bufferLeg = firstSet[i];
+                if(Vector3.Distance(_bufferLeg.TargetTransform.position, _bufferLeg.BufferLegPosition) < lerpThreshold)
+                {
+                    _trues++;
+                    if (_bufferLeg.Interactable != null)
+                    {
+                        _bufferLeg.Interactable.Activate();
+                    }
+                }
+            }
+            if(_trues == firstSet.Count)
             {
                 // Resets bool and height bool
                 isFirstStepMoving = false;
@@ -73,8 +110,22 @@ public class SpiderSets : Spider
             // Moves the leg
             secondSet.ForEach(x => x.MoveLeg(speed));
 
-            // Seek if all the legs have arrives to their target position
-            if (secondSet.TrueForAll(x => Vector3.Distance(x.TargetTransform.position, x.BufferLegPosition) < lerpThreshold))
+            SpiderLeg _bufferLeg = null;
+            int _trues = 0;
+            for (int i = 0; i < secondSet.Count; i++)
+            {
+                _bufferLeg = secondSet[i];
+                if (Vector3.Distance(_bufferLeg.TargetTransform.position, _bufferLeg.BufferLegPosition) < lerpThreshold)
+                {
+                    _trues++;
+                    if (_bufferLeg.Interactable != null)
+                    {
+                        _bufferLeg.Interactable.Activate();
+                    }
+                }
+
+            }
+            if (_trues == secondSet.Count)
             {
                 // Resets bool and height bool
                 isSecondStepMoving = false;

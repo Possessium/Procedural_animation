@@ -1,22 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Spider : MonoBehaviour
 {
 
     [SerializeField] private protected float speed = 15;
-    [SerializeField] private float distance = 2;
+    [SerializeField] private protected float distance = 2;
     [SerializeField, Range(.01f, 1)] private protected float lerpThreshold = .1f;
     [SerializeField] private Transform parentedTransformParent = null;
-
+    List<ISpiderInteractable> activeInteractables = new List<ISpiderInteractable>();
+    // private protected bool isStable;
 
     /*
-     * Method to detect interactables               TO REDACT
-     * Method to check Height                       DONE
-     * Method to check Angle                        NO IDEA HOW TO SCALE IT
-     * Method to check Distance ? (list & single)   DONE
-     * Method to Place bones properly               ABORTED FOR THE MOMENT
+     * Method to detect interactables                       TO REDACT
+     * Method to check Height                               DONE
+     * Method to check Angle                                NO IDEA HOW TO SCALE IT
+     * Method to check Distance ? (list & single)           DONE
+     * Method to Place bones properly                       ABORTED FOR THE MOMENT
+     * Method to know if the body is stable on its legs     
      */
 
     protected virtual void Update()
@@ -83,8 +86,28 @@ public class Spider : MonoBehaviour
 
     private protected void CheckInteractbles(SpiderLeg _l)
     {
-        // Spherecast du bone start sur la longueur de la patte
-        // Si ISpiderInteracble --> poggers
+        RaycastHit[] _hits = Physics.SphereCastAll(_l.transform.position, _l.LegIK.CompleteLength, Vector3.up);
+        if (_hits.Length > 0)
+        {
+            _hits.OrderBy(x => x.distance);
+            for (int i = 0; i < _hits.Length; i++)
+            {
+                ISpiderInteractable _buffer = _hits[i].transform.GetComponent<ISpiderInteractable>();
+                if (_buffer != null && !activeInteractables.Contains(_buffer))
+                {
+                    _l.Interactable = _buffer;
+                    activeInteractables.Add(_buffer);
+                    _l.BufferLegPosition = _hits[i].transform.position;
+                    break;
+                }
+            }
+        }
+    }
+
+    private protected void RemoveInteractable(ISpiderInteractable _i)
+    {
+        if (activeInteractables.Contains(_i))
+            activeInteractables.Remove(_i);
     }
 
     //private protected void CheckBones(SpiderLeg _l)

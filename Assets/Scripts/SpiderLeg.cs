@@ -8,9 +8,21 @@ public class SpiderLeg : MonoBehaviour
     public Transform ParentedTransform = null;
     public Transform TargetTransform = null;
     [HideInInspector] public Vector3 BufferLegPosition = Vector3.zero;
+    [SerializeField] private FastIKFabric legIK = null;
+    public ISpiderInteractable Interactable = null;
+    public FastIKFabric LegIK { get { return legIK; } }
 
     private bool heightReached = false;
-    
+
+    // public bool grounded pour pouvoir lever les autres pattes ou non si le body est stable
+
+    private void Start()
+    {
+        if(!legIK)
+            legIK = GetComponentInChildren<FastIKFabric>();
+
+        BufferLegPosition = TargetTransform.position;
+    }
 
     private void OnDrawGizmos()
     {
@@ -19,6 +31,9 @@ public class SpiderLeg : MonoBehaviour
 
         Gizmos.color = Color.blue;
         Gizmos.DrawSphere(TargetTransform.position, .2f);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(BufferLegPosition, .2f);
     }
 
     /// <summary>

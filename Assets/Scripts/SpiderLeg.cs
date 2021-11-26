@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DitzelGames.FastIK;
 
 public class SpiderLeg : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class SpiderLeg : MonoBehaviour
     [HideInInspector] public Vector3 BufferLegPosition = Vector3.zero;
 
     private bool heightReached = false;
-
+    
 
     private void OnDrawGizmos()
     {

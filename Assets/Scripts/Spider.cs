@@ -11,6 +11,7 @@ public class Spider : MonoBehaviour
     [SerializeField, Range(.01f, 1)] private protected float lerpThreshold = .1f;
     [SerializeField] private Transform parentedTransformParent = null;
     List<ISpiderInteractable> activeInteractables = new List<ISpiderInteractable>();
+    [SerializeField] int deb = 0;
     // private protected bool isStable;
 
     /*
@@ -24,6 +25,7 @@ public class Spider : MonoBehaviour
 
     protected virtual void Update()
     {
+        deb = activeInteractables.Count;
         // Sets the position of the parentedtransform because they can't be parented due to rotation of the body
         parentedTransformParent.position = transform.position;
         // CheckAngle();

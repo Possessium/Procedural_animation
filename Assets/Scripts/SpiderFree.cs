@@ -23,19 +23,17 @@ public class SpiderFree : Spider
         for (int i = 0; i < allLegs.Count; i++)
         {
             if (IsBeyondDistance(allLegs[i]))
-                allLegs[i].BufferLegPosition = allLegs[i].ParentedTransform.position;
-            allLegs[i].MoveLeg(speed);
-            if (Vector3.Distance(allLegs[i].TargetTransform.position, allLegs[i].BufferLegPosition) < lerpThreshold)
             {
                 if (allLegs[i].Interactable != null)
-                    allLegs[i].Interactable.Activate();
+                {
+                    allLegs[i].Interactable.Deactivate();
+                    RemoveInteractable(allLegs[i].Interactable);
+                    allLegs[i].Interactable = null;
+                }
+                allLegs[i].BufferLegPosition = allLegs[i].ParentedTransform.position;
             }
-            else if (allLegs[i].Interactable != null)
-            {
-                RemoveInteractable(allLegs[i].Interactable);
-                allLegs[i].Interactable.Deactivate();
-                allLegs[i].Interactable = null;
-            }
+
+            allLegs[i].MoveLeg(speed);
         }
     }
 }

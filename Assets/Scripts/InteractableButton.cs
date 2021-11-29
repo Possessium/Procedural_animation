@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class InteractableButton : MonoBehaviour, ISpiderInteractable
 {
+    public Renderer Rend = null;
+    public Material ActiveMat = null;
+    public Material DisableMat = null;
+
     public void Activate()
     {
-        Debug.Log("Active");
+        Rend.material = ActiveMat;
     }
 
     public void Deactivate()
     {
-        Debug.Log("Disabled");
+        Rend.material = DisableMat;
     }
 }

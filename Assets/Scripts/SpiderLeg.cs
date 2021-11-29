@@ -13,6 +13,7 @@ public class SpiderLeg : MonoBehaviour
     public FastIKFabric LegIK { get { return legIK; } }
 
     private bool heightReached = false;
+    private bool interactableTouching = false;
 
     // public bool grounded pour pouvoir lever les autres pattes ou non si le body est stable
 
@@ -22,6 +23,22 @@ public class SpiderLeg : MonoBehaviour
             legIK = GetComponentInChildren<FastIKFabric>();
 
         BufferLegPosition = TargetTransform.position;
+    }
+
+    private void Update()
+    {
+        if (Interactable != null && !interactableTouching)
+        {
+            RaycastHit _hit;
+            if (Physics.Raycast(transform.position, LegIK.transform.position - transform.position, out _hit, LegIK.CompleteLength))
+                if (_hit.transform.GetComponent<ISpiderInteractable>() == Interactable)
+                {
+                    interactableTouching = true;
+                    Interactable.Activate();
+                }
+        }
+        else if (Interactable == null)
+            interactableTouching = false;
     }
 
     private void OnDrawGizmos()

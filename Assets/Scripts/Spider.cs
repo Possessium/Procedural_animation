@@ -66,7 +66,7 @@ public class Spider : MonoBehaviour
     private protected bool IsBeyondDistance(SpiderLeg _l)
     {
         // Return true if the distance between the parented position and the current position is above the distance
-        return Vector3.Distance(_l.ParentedTransform.position, _l.TargetTransform.position) > distance;
+            return Vector3.Distance(_l.ParentedTransform.position, _l.TargetTransform.position) > distance;
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ public class Spider : MonoBehaviour
 
     private protected void CheckInteractbles(SpiderLeg _l)
     {
-        RaycastHit[] _hits = Physics.SphereCastAll(_l.transform.position, _l.LegIK.CompleteLength, Vector3.up);
+        RaycastHit[] _hits = Physics.SphereCastAll(_l.transform.position, _l.LegIK.CompleteLength - .5f, Vector3.up);
         if (_hits.Length > 0)
         {
             _hits.OrderBy(x => x.distance);

@@ -83,4 +83,12 @@ public class SpiderLeg : MonoBehaviour
     {
         heightReached = false;
     }
+
+    public bool IsInteractableTooFar()
+    {
+        if (Interactable == null)
+            return false;
+
+        return Vector3.Distance(transform.position, ((MonoBehaviour)Interactable).transform.position) > legIK.CompleteLength;
+    }
 }

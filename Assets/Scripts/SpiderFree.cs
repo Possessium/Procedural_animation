@@ -22,7 +22,7 @@ public class SpiderFree : Spider
     {
         for (int i = 0; i < allLegs.Count; i++)
         {
-            if (IsBeyondDistance(allLegs[i]))
+            if (IsBeyondDistance(allLegs[i]) || allLegs[i].IsInteractableTooFar())
             {
                 if (allLegs[i].Interactable != null)
                 {
